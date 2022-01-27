@@ -15,6 +15,7 @@ function App() {
                     {publicRoutes.map(route => {
                         return <Route key={route.path} path={route.path} element={<route.component/>}/>
                     })}
+                    <Route path={'*'} element={<Navigate to='/login'/>} />
                 </Routes>
                 : <LayoutComponent>
                     <Routes>
