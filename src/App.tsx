@@ -1,12 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './App.css';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {hasToken} from "./utils";
 import {privateRoutes, publicRoutes} from "./routes";
 import LayoutComponent from "./components/Layouts";
+import {UserContext} from "./utils/context/userContext";
 
 function App() {
-    const hasUserToken = hasToken();
+    const {token} = useContext(UserContext);
+    const hasUserToken = hasToken() || token;
 
     return (
         <>

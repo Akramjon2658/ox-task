@@ -1,30 +1,39 @@
 import {Button, Form, Input} from 'antd';
 import './auth.css';
 import {AuthAPI} from "../../api/request/authAPI";
-import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {Navigate} from "react-router-dom";
+import {useContext, useState} from "react";
 import {setTokenToLocalStorage} from "../../utils";
+import {UserContext} from "../../utils/context/userContext";
 
 const Login = () => {
-    const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [toMain, setToMain] = useState(false)
+
+    const {setToken} = useContext(UserContext);
 
     const onFinish = (values: any) => {
         setLoading(true);
         AuthAPI.check(values)
             .then(r => {
                 if (r.status === 200) {
-                    setTokenToLocalStorage(r.data.token)
-                    navigate('/')
+                    setTokenToLocalStorage(r.data.token);
+                    setToken(r.data.token);
+                    setToMain(true)
                 } else {
                     setError(r.data)
                 }
             })
-            .catch(e => setError(e.response.data?.message))
-            .finally(() => setLoading(false))
+            .catch(e => {
+                setError(e.response.data?.message);
+            })
+            .finally(() => setLoading(false));
     };
 
+    if (toMain) {
+        return <Navigate to={'/products'}/>
+    }
     return (
         <div className={'login'}>
             <Form
@@ -50,7 +59,7 @@ const Login = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Parol"
+                    label="Password"
                     name="_password"
                     rules={[
                         {
