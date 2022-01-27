@@ -1,0 +1,22 @@
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f3f3f3;
+}
+
+.login form {
+    background: #fff;
+    padding: 50px 40px 30px 40px;
+    width: 400px;
+    border-radius: 5px;
+}
+
+.login form .submit-button-wrapper {
+    text-align: end;
+}
+
+.login .error {
+    color: red;
+}

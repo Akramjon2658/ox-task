@@ -1,26 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Navigate, Route, Routes} from 'react-router-dom';
+import {hasToken} from "./utils";
+import {privateRoutes, publicRoutes} from "./routes";
+import LayoutComponent from "./components/Layouts";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const hasUserToken = hasToken();
+
+    return (
+        <>
+            {!hasUserToken
+                ? <Routes>
+                    {publicRoutes.map(route => {
+                        return <Route key={route.path} path={route.path} element={<route.component/>}/>
+                    })}
+                </Routes>
+                : <LayoutComponent>
+                    <Routes>
+                        {privateRoutes.map(route => {
+                            return <Route key={route.path} path={route.path} element={ <route.component/>}/>
+                        })}
+                        <Route path={'*'} element={<Navigate to='/products'/>} />
+                    </Routes>
+                </LayoutComponent>
+            }
+        </>
+    );
 }
 
 export default App;
